@@ -4,6 +4,7 @@ local workareas = {}
 local notifs = {}
 local visible = true
 local dbcooper = false
+local notif, notif2, notifbutton1, notiftext, notiftitle, notif2button1, notif2button2, notif2text, notif2title, notificon, notif2icon, resize
 
 local function tp(ins, pos, time)
     game:GetService("TweenService"):Create(ins, TweenInfo.new(time, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = pos}):Play()
@@ -37,6 +38,160 @@ function lib:init(ti, dosplash, visiblekey, deleteprevious)
         scrgui = Instance.new("ScreenGui")
         scrgui.Parent = cg
     end
+
+notif = Instance.new("Frame")
+    notif.Name = "notif"
+    notif.Parent = main
+    notif.AnchorPoint = Vector2.new(0.5, 0.5)
+    notif.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    notif.Position = UDim2.new(0.5, 0, 0.5, 0)
+    notif.Size = UDim2.new(0, 304, 0, 362)
+    notif.Visible = false
+    notif.ZIndex = 3
+
+    local notifCorner = Instance.new("UICorner")
+    notifCorner.CornerRadius = UDim.new(0, 18)
+    notifCorner.Parent = notif
+
+    notificon = Instance.new("ImageLabel")
+    notificon.Name = "notificon"
+    notificon.Parent = notif
+    notificon.BackgroundTransparency = 1
+    notificon.Position = UDim2.new(0.335526317, 0, 0.0994475111, 0)
+    notificon.Size = UDim2.new(0, 100, 0, 100)
+    notificon.ZIndex = 3
+    notificon.Image = "rbxassetid://4871684504"
+    notificon.ImageColor3 = Color3.fromRGB(95, 95, 95)
+
+    notifbutton1 = Instance.new("TextButton")
+    notifbutton1.Name = "notifbutton1"
+    notifbutton1.Parent = notif
+    notifbutton1.BackgroundColor3 = Color3.fromRGB(21, 103, 251)
+    notifbutton1.Position = UDim2.new(0.0559210554, 0, 0.817679524, 0)
+    notifbutton1.Size = UDim2.new(0, 270, 0, 50)
+    notifbutton1.ZIndex = 3
+    notifbutton1.Font = Enum.Font.Gotham
+    notifbutton1.TextColor3 = Color3.fromRGB(255, 255, 255)
+    notifbutton1.TextSize = 21
+    notifbutton1.Text = "OK"
+
+    local notifButtonCorner = Instance.new("UICorner")
+    notifButtonCorner.CornerRadius = UDim.new(0, 9)
+    notifButtonCorner.Parent = notifbutton1
+
+    notiftitle = Instance.new("TextLabel")
+    notiftitle.Name = "notiftitle"
+    notiftitle.Parent = notif
+    notiftitle.BackgroundTransparency = 1
+    notiftitle.Position = UDim2.new(0.167763159, 0, 0.375690609, 0)
+    notiftitle.Size = UDim2.new(0, 200, 0, 50)
+    notiftitle.ZIndex = 3
+    notiftitle.Font = Enum.Font.GothamMedium
+    notiftitle.Text = "Notice"
+    notiftitle.TextColor3 = Color3.fromRGB(95, 95, 95)
+    notiftitle.TextSize = 28
+
+    notiftext = Instance.new("TextLabel")
+    notiftext.Name = "notiftext"
+    notiftext.Parent = notif
+    notiftext.BackgroundTransparency = 1
+    notiftext.Position = UDim2.new(0.0822368413, 0, 0.513812184, 0)
+    notiftext.Size = UDim2.new(0, 254, 0, 66)
+    notiftext.ZIndex = 3
+    notiftext.Font = Enum.Font.Gotham
+    notiftext.Text = ""
+    notiftext.TextColor3 = Color3.fromRGB(95, 95, 95)
+    notiftext.TextSize = 16
+    notiftext.TextWrapped = true
+
+    -- Notification 2
+    notif2 = Instance.new("Frame")
+    notif2.Name = "notif2"
+    notif2.Parent = main
+    notif2.AnchorPoint = Vector2.new(0.5, 0.5)
+    notif2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    notif2.Position = UDim2.new(0.5, 0, 0.5, 0)
+    notif2.Size = UDim2.new(0, 304, 0, 362)
+    notif2.Visible = false
+    notif2.ZIndex = 3
+
+    local notif2Corner = Instance.new("UICorner")
+    notif2Corner.CornerRadius = UDim.new(0, 18)
+    notif2Corner.Parent = notif2
+
+    notif2icon = Instance.new("ImageLabel")
+    notif2icon.Name = "notif2icon"
+    notif2icon.Parent = notif2
+    notif2icon.BackgroundTransparency = 1
+    notif2icon.Position = UDim2.new(0.335526317, 0, 0.0994475111, 0)
+    notif2icon.Size = UDim2.new(0, 100, 0, 100)
+    notif2icon.ZIndex = 3
+    notif2icon.Image = "rbxassetid://12608260095"
+    notif2icon.ImageColor3 = Color3.fromRGB(95, 95, 95)
+
+    notif2title = Instance.new("TextLabel")
+    notif2title.Name = "notif2title"
+    notif2title.Parent = notif2
+    notif2title.BackgroundTransparency = 1
+    notif2title.Position = UDim2.new(0.167763159, 0, 0.375690609, 0)
+    notif2title.Size = UDim2.new(0, 200, 0, 50)
+    notif2title.ZIndex = 3
+    notif2title.Font = Enum.Font.GothamMedium
+    notif2title.Text = "Notice"
+    notif2title.TextColor3 = Color3.fromRGB(95, 95, 95)
+    notif2title.TextSize = 28
+
+    notif2text = Instance.new("TextLabel")
+    notif2text.Name = "notif2text"
+    notif2text.Parent = notif2
+    notif2text.BackgroundTransparency = 1
+    notif2text.Position = UDim2.new(0.0822368413, 0, 0.513812184, 0)
+    notif2text.Size = UDim2.new(0, 254, 0, 66)
+    notif2text.ZIndex = 3
+    notif2text.Font = Enum.Font.Gotham
+    notif2text.Text = ""
+    notif2text.TextColor3 = Color3.fromRGB(95, 95, 95)
+    notif2text.TextSize = 16
+    notif2text.TextWrapped = true
+
+    notif2button1 = Instance.new("TextButton")
+    notif2button1.Name = "notif2button1"
+    notif2button1.Parent = notif2
+    notif2button1.BackgroundColor3 = Color3.fromRGB(21, 103, 251)
+    notif2button1.Position = UDim2.new(0.0559210517, 0, 0.715469658, 0)
+    notif2button1.Size = UDim2.new(0, 270, 0, 40)
+    notif2button1.ZIndex = 3
+    notif2button1.Font = Enum.Font.Gotham
+    notif2button1.Text = "Sure!"
+    notif2button1.TextColor3 = Color3.fromRGB(255, 255, 255)
+    notif2button1.TextSize = 21
+
+    notif2button2 = Instance.new("TextButton")
+    notif2button2.Name = "notif2button2"
+    notif2button2.Parent = notif2
+    notif2button2.BackgroundColor3 = Color3.fromRGB(21, 103, 251)
+    notif2button2.BackgroundTransparency = 1
+    notif2button2.Position = UDim2.new(0.0526315793, 0, 0.842541456, 0)
+    notif2button2.Size = UDim2.new(0, 270, 0, 40)
+    notif2button2.ZIndex = 3
+    notif2button2.Font = Enum.Font.Gotham
+    notif2button2.Text = "Cancel"
+    notif2button2.TextColor3 = Color3.fromRGB(95, 95, 95)
+    notif2button2.TextSize = 21
+
+    -- Add the resize button
+    resize = Instance.new("TextButton")
+    resize.Name = "resize"
+    resize.Parent = main
+    resize.BackgroundColor3 = Color3.fromRGB(39, 200, 63)
+    resize.Size = UDim2.new(0, 16, 0, 16)
+    resize.Position = UDim2.new(0, 82, 0, 29)
+    resize.AutoButtonColor = false
+    resize.Text = ""
+
+    local resizeCorner = Instance.new("UICorner")
+    resizeCorner.CornerRadius = UDim.new(1, 0)
+    resizeCorner.Parent = resize
 
     -- Splash screen
     if dosplash then
