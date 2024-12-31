@@ -20,6 +20,44 @@ local function loadUI()
 
     local currentTheme = "Default"
 
+    -- Notification function
+    local function showNotification(message, type, screenGui)
+        local notif = Instance.new("Frame")
+        notif.Size = UDim2.new(0, 250, 0, 60)
+        notif.Position = UDim2.new(1, -270, 0.9, -70)
+        notif.BackgroundColor3 = type == "success" and Color3.fromRGB(35, 165, 85) or Color3.fromRGB(225, 45, 45)
+        notif.Parent = screenGui
+        
+        local notifCorner = Instance.new("UICorner")
+        notifCorner.CornerRadius = UDim.new(0, 8)
+        notifCorner.Parent = notif
+        
+        local notifText = Instance.new("TextLabel")
+        notifText.Size = UDim2.new(1, -20, 1, 0)
+        notifText.Position = UDim2.new(0, 10, 0, 0)
+        notifText.BackgroundTransparency = 1
+        notifText.Text = message
+        notifText.TextColor3 = themes[currentTheme].text
+        notifText.TextSize = 16
+        notifText.Font = Enum.Font.GothamBold
+        notifText.TextWrapped = true
+        notifText.Parent = notif
+        
+        notif.Position = UDim2.new(1, 20, 0.9, -70)
+        TweenService:Create(notif, TweenInfo.new(0.5), {
+            Position = UDim2.new(1, -270, 0.9, -70)
+        }):Play()
+        
+        task.wait(2)
+        
+        TweenService:Create(notif, TweenInfo.new(0.5), {
+            Position = UDim2.new(1, 20, 0.9, -70)
+        }):Play()
+        
+        task.wait(0.5)
+        notif:Destroy()
+    end
+
     local function createStyledButton(text, callback)
         local button = Instance.new("TextButton")
         button.Size = UDim2.new(0.9, 0, 0, 40)
@@ -54,6 +92,11 @@ local function loadUI()
     end
 
     local function createModernUI(title, categories)
+        categories = categories or {
+            {name = "Home", icon = "🏠"},
+            {name = "Settings", icon = "⚙️"}
+        }
+
         local screenGui = Instance.new("ScreenGui")
         screenGui.Name = "ModernUI"
         screenGui.Parent = game.CoreGui
@@ -203,6 +246,9 @@ local function loadUI()
                 return selectedCategory
             end,
             CreateButton = createStyledButton,
+            ShowNotification = function(message, type)
+                showNotification(message, type, screenGui)
+            end,
             Destroy = function()
                 screenGui:Destroy()
                 blurEffect:Destroy()
