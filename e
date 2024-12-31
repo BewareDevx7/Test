@@ -4,8 +4,7 @@ local function loadUI()
     local Players = game:GetService("Players")
     local UserInputService = game:GetService("UserInputService")
     local TweenService = game:GetService("TweenService")
-
-    -- Themes
+    
     local themes = {
         Default = {
             name = "Default",
@@ -116,7 +115,6 @@ local function loadUI()
         mainCorner.CornerRadius = UDim.new(0, 12)
         mainCorner.Parent = mainFrame
 
-        -- Create category containers
         local categoryContainers = {}
         for _, category in ipairs(categories) do
             local container = Instance.new("ScrollingFrame")
@@ -135,11 +133,9 @@ local function loadUI()
             
             categoryContainers[category.name] = container
         end
-        
-        -- Set first category visible
+
         categoryContainers[categories[1].name].Visible = true
 
-        -- Create sidebar
         local sidebar = Instance.new("Frame")
         sidebar.Size = UDim2.new(0, 200, 1, 0)
         sidebar.BackgroundColor3 = themes[currentTheme].sidebar
@@ -182,17 +178,14 @@ local function loadUI()
             
             button.MouseButton1Click:Connect(function()
                 if selectedCategory == category.name then return end
-                
-                -- Hide previous category
+
                 if categoryContainers[selectedCategory] then
                     categoryContainers[selectedCategory].Visible = false
                 end
-                
-                -- Show new category
+
                 selectedCategory = category.name
                 categoryContainers[selectedCategory].Visible = true
-                
-                -- Update button colors
+
                 for catName, btn in pairs(categoryButtons) do
                     TweenService:Create(btn, TweenInfo.new(0.2), {
                         BackgroundColor3 = catName == selectedCategory 
@@ -205,7 +198,6 @@ local function loadUI()
 
         categoryButtons[selectedCategory].BackgroundColor3 = themes[currentTheme].buttonHover
 
-        -- Toggle UI visibility
         UserInputService.InputBegan:Connect(function(input)
             if input.KeyCode == Enum.KeyCode.RightShift then
                 mainFrame.Visible = not mainFrame.Visible
