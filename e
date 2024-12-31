@@ -20,7 +20,6 @@ local function loadUI()
 
     local currentTheme = "Default"
 
-    -- Notification function
     local function showNotification(message, type, screenGui)
         local notif = Instance.new("Frame")
         notif.Size = UDim2.new(0, 250, 0, 60)
@@ -117,42 +116,28 @@ local function loadUI()
         mainCorner.CornerRadius = UDim.new(0, 12)
         mainCorner.Parent = mainFrame
 
-        -- Dragging functionality
-        local dragging = false
-        local dragStart
-        local startPos
-
-        local function updateDrag(input)
-            if dragging then
-                local delta = input.Position - dragStart
-                mainFrame.Position = UDim2.new(
-                    startPos.X.Scale,
-                    startPos.X.Offset + delta.X,
-                    startPos.Y.Scale,
-                    startPos.Y.Offset + delta.Y
-                )
-            end
+        -- Create category containers
+        local categoryContainers = {}
+        for _, category in ipairs(categories) do
+            local container = Instance.new("ScrollingFrame")
+            container.Size = UDim2.new(1, -220, 1, -20)
+            container.Position = UDim2.new(0, 210, 0, 10)
+            container.BackgroundTransparency = 1
+            container.ScrollBarThickness = 4
+            container.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
+            container.Name = category.name
+            container.Visible = false
+            container.Parent = mainFrame
+            
+            local contentLayout = Instance.new("UIListLayout")
+            contentLayout.Padding = UDim.new(0, 10)
+            contentLayout.Parent = container
+            
+            categoryContainers[category.name] = container
         end
-
-        mainFrame.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragging = true
-                dragStart = input.Position
-                startPos = mainFrame.Position
-            end
-        end)
-
-        mainFrame.InputEnded:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragging = false
-            end
-        end)
-
-        mainFrame.InputChanged:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseMovement then
-                updateDrag(input)
-            end
-        end)
+        
+        -- Set first category visible
+        categoryContainers[categories[1].name].Visible = true
 
         -- Create sidebar
         local sidebar = Instance.new("Frame")
@@ -173,19 +158,6 @@ local function loadUI()
         titleLabel.TextSize = 24
         titleLabel.Font = Enum.Font.GothamBold
         titleLabel.Parent = sidebar
-
-        -- Create content frame
-        local contentFrame = Instance.new("ScrollingFrame")
-        contentFrame.Size = UDim2.new(1, -220, 1, -20)
-        contentFrame.Position = UDim2.new(0, 210, 0, 10)
-        contentFrame.BackgroundTransparency = 1
-        contentFrame.ScrollBarThickness = 4
-        contentFrame.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
-        contentFrame.Parent = mainFrame
-
-        local contentLayout = Instance.new("UIListLayout")
-        contentLayout.Padding = UDim.new(0, 10)
-        contentLayout.Parent = contentFrame
 
         local selectedCategory = categories[1].name
         local categoryButtons = {}
@@ -211,17 +183,22 @@ local function loadUI()
             button.MouseButton1Click:Connect(function()
                 if selectedCategory == category.name then return end
                 
+                -- Hide previous category
+                if categoryContainers[selectedCategory] then
+                    categoryContainers[selectedCategory].Visible = false
+                end
+                
+                -- Show new category
                 selectedCategory = category.name
+                categoryContainers[selectedCategory].Visible = true
+                
+                -- Update button colors
                 for catName, btn in pairs(categoryButtons) do
                     TweenService:Create(btn, TweenInfo.new(0.2), {
                         BackgroundColor3 = catName == selectedCategory 
                             and themes[currentTheme].buttonHover 
                             or themes[currentTheme].button
                     }):Play()
-                end
-                
-                if ui and ui.OnCategoryChanged then
-                    ui.OnCategoryChanged(category.name)
                 end
             end)
         end
@@ -240,7 +217,7 @@ local function loadUI()
             ScreenGui = screenGui,
             MainFrame = mainFrame,
             Sidebar = sidebar,
-            ContentFrame = contentFrame,
+            ContentFrame = categoryContainers,
             BlurEffect = blurEffect,
             CurrentCategory = function()
                 return selectedCategory
@@ -252,8 +229,7 @@ local function loadUI()
             Destroy = function()
                 screenGui:Destroy()
                 blurEffect:Destroy()
-            end,
-            OnCategoryChanged = nil
+            end
         }
 
         return ui
